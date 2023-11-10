@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Table</title>
+</head>
+<body>
+
+<h2>Movies Table</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Classifications</th>
+        </tr>
+    </thead>
+    <tbody id="moviesTableBody"></tbody>
+</table>
+
+<script>
+    // Function to fetch and display movies from the external file
+    function displayMovies() {
+        // Fetch the content of the "movies.txt" file
+        //fetch('./movies.csv')
+		//fetch('https://storage.cloud.google.com/cc202301/movies.txt?authuser=2')
+		fetch('https://storage.googleapis.com/cc202301/movies.csv')
+            .then(response => response.text())
+            .then(data => {
+                // Split the data into individual movies based on '::'
+                const movies = data.split('\n');
+
+                // Get the table body element
+                const tableBody = document.getElementById('moviesTableBody');
+
+                // Iterate through each movie and create a table row
+                movies.forEach(movie => {
+                    // Split the movie details into id, title, and classifications based on '|'
+                    const [id, title, classifications] = movie.split(';');
+
+                    // Create a table row and populate it with movie details
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${id}</td>
+                        <td>${title}</td>
+                        <td>${classifications}</td>
+                    `;
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching movies:', error));
+    }
+
+    // Call the function to display movies when the page loads
+    displayMovies();
+</script>
+
+</body>
+</html>
